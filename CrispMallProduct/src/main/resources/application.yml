@@ -11,11 +11,11 @@ mybatis-plus:
 spring:
   application:
     #????
-    name: CrispMallUser
+    name: CrispMallProduct
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://119.29.100.51:3306/CrispMallUser?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://119.29.100.51:3306/CrispMallProduct?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: ???
 
@@ -24,6 +24,7 @@ spring:
     suffix: .html
     mode: HTML5
     encoding: UTF-8
+
   main:
     lazy-initialization: false
   redis:
@@ -55,5 +56,6 @@ minio:
   bucketName: crisp
 
 server:
-  port: 9001
+  port: 9002
+
 

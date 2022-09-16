@@ -1,4 +1,4 @@
-package cn.crisp.crispmalluser.entity;
+package cn.crisp.crispmallorder.entity;
 
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
