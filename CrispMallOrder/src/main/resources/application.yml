@@ -8,55 +8,22 @@ mybatis-plus:
       logic-delete-field: isDeleted #???????????????????TableLogic??
       logic-not-delete-value: 0 #?????
       logic-delete-value: 1 #??????
-spring:
-  application:
-    #????
-    name: CrispMallOrder
-  datasource:
-    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://119.29.100.51:3306/CrispMallOrder?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: ???
 
+server:
+  port: 9003
+
+spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML5
     encoding: UTF-8
 
-  main:
-    lazy-initialization: false
-  redis:
-    host: 119.29.100.51
-    port: 6379
-    database: 0 #??0????
-    jedis:
-      #?????
-      pool:
-        max-active: 8 #?????
-        max-wait: 1ms
-        max-idle: 4 #??????
-        min-idle: 0 #??????
-    password: ???
-
-  cache:
-    redis:
-      time-to-live: 180000 #??ms
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
 
 
-minio:
-  endpoint: http://119.29.100.51:11000
-  accesskey: crisp
-  secretkey: ???
-  bucketName: crisp
 
-server:
-  port: 9003
+
+
 
 
 
