@@ -15,6 +15,7 @@
         <module>CrispMallAdmin</module>
         <module>CrispMallProduct</module>
         <module>CrispMallCommon</module>
+        <module>CrispMallGateWay</module>
     </modules>
 
     <properties>
