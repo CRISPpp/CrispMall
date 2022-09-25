@@ -1,4 +1,4 @@
-package cn.crisp.common;
+package cn.crisp.crispmalluser.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

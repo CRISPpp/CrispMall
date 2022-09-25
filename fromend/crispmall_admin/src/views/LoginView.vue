@@ -24,6 +24,8 @@
 
 <script>
 import { ref } from 'vue';
+import { ElNotification } from 'element-plus'
+import axios from 'axios'
 
 export default {
     name: "LoginView",
@@ -39,10 +41,50 @@ export default {
             return;
         }
         let login = () => {
-            ngm.play();
+            axios.post('/api/user/login', {
+                username: username.value,
+                password: password.value,
+            }).then((response) => {
+                if (response.data.code === 1) {
+                    ElNotification({
+                        title: '登录成功',
+                        message: response.data.data,
+                        type: 'success',
+                    })
+                }
+                else {
+                    ngm.play();
+                    ElNotification({
+                        title: '登录失败',
+                        message: response.data.msg,
+                        type: 'error',
+                    })
+                }
+            })
+
         }
         let register = () => {
-            ngm.play();
+            axios.post('/api/user/register', {
+                username: username.value,
+                password: password.value,
+            }).then((response) => {
+                if (response.data.code === 1) {
+                    ElNotification({
+                        title: '注册成功',
+                        message: response.data.data,
+                        type: 'success',
+                    })
+                    changeLoginFlag();
+                }
+                else {
+                    ngm.play();
+                    ElNotification({
+                        title: '注册失败',
+                        message: response.data.msg,
+                        type: 'error',
+                    })
+                }
+            })
         }
         return {
             username,

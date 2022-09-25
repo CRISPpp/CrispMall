@@ -47,5 +47,5 @@ public class BaseEntity implements Serializable {
 
     @Version
     @TableField(fill = FieldFill.INSERT)
-    private Integer version;
+    private Long version;
 }
