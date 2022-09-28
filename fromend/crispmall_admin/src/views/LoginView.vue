@@ -15,8 +15,10 @@
                 <div class="change" v-if="!loginFlag" @click="changeLoginFlag">
                     <p>登录</p>
                 </div>
-                <el-button type="success" class="login_button" v-if="loginFlag" @click="login">登录</el-button>
-                <el-button type="success" class="login_button" v-if="!loginFlag" @click="register">注册</el-button>
+                <el-button type="success" class="login_button" :loading="load" v-if="loginFlag" @click="login">登录
+                </el-button>
+                <el-button type="success" class="login_button" :loading="load" v-if="!loginFlag" @click="register">注册
+                </el-button>
             </div>
         </div>
     </div>
@@ -26,13 +28,14 @@
 import { ref } from 'vue';
 import { ElNotification } from 'element-plus'
 import axios from 'axios'
-
+import router from '@/router';
 export default {
     name: "LoginView",
     setup() {
         let username = ref('');
         let password = ref('');
         let loginFlag = ref(true);
+        let load = ref(false);
         let ji = new Audio("http://119.29.100.51:11000/crispmall/ji.mp3");
         let ngm = new Audio("http://119.29.100.51:11000/crispmall/ngm.mp3");
         let changeLoginFlag = () => {
@@ -41,11 +44,14 @@ export default {
             return;
         }
         let login = () => {
+            load.value = true;
             axios.post('/api/user/login', {
                 username: username.value,
                 password: password.value,
             }).then((response) => {
+                load.value = false;
                 if (response.data.code === 1) {
+                    router.push({ path: '/index' });
                     ElNotification({
                         title: '登录成功',
                         message: response.data.data,
@@ -64,10 +70,12 @@ export default {
 
         }
         let register = () => {
+            load.value = true;
             axios.post('/api/user/register', {
                 username: username.value,
                 password: password.value,
             }).then((response) => {
+                load.value = false;
                 if (response.data.code === 1) {
                     ElNotification({
                         title: '注册成功',
@@ -90,6 +98,7 @@ export default {
             username,
             password,
             loginFlag,
+            load,
             changeLoginFlag,
             login,
             register,

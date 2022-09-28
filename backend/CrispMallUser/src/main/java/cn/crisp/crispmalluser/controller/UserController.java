@@ -6,8 +6,10 @@ import cn.crisp.crispmalluser.dto.LoginDto;
 import cn.crisp.crispmalluser.entity.User;
 import cn.crisp.crispmalluser.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +24,13 @@ public class UserController {
 
     @ApiOperation("获取所有用户")
     @GetMapping
-    public R<List<User>> getUser(){
-        return R.success(userService.list());
+    public R<Page> getUser(int page, int pageSize){
+
+        Page<User> ret = new Page<>(page, pageSize);
+        ret = userService.page(ret);
+
+        return R.success(ret);
+
     }
 
     @ApiOperation("登录")
@@ -41,6 +48,7 @@ public class UserController {
     @ApiOperation("注册")
     @PostMapping("/register")
     public R<String> register(@RequestBody LoginDto loginDto){
+        if(StringUtils.isEmpty(loginDto.getUsername())) return R.error("用户名不能为空，你干嘛哎哟");
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUsername, loginDto.getUsername());
         User user = userService.getOne(wrapper);

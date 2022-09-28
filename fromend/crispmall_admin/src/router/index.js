@@ -1,6 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import  LoginView  from '@/views/LoginView.vue';
+import  LoginView  from '@/views/LoginView.vue'
+import IndexView from '@/views/IndexView.vue'
+import UserComponent from '@/components/UserComponent.vue'
+import ProductComponent from '@/components/ProductComponent.vue'
+import OrderComponent from '@/components/OrderComponent.vue'
 const routes = [
   {
     path:'/',
@@ -8,11 +11,28 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/home',
-    name: 'home',
-    component: HomeView
-  },
-
+    path:'/index',
+    name:'index',
+    component: IndexView,
+    redirect: '/user',
+    children:[
+      {
+        path:'/user',
+        name:'user',
+        component: UserComponent,
+      },
+      {
+        path:'/product',
+        name:'product',
+        component: ProductComponent,
+      },
+      {
+        path:'/order',
+        name:'order',
+        component: OrderComponent,
+      },
+    ],
+  }
 ]
 
 const router = createRouter({
