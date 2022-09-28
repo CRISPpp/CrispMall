@@ -58,7 +58,6 @@ export default {
                     pageSize: pageSize.value,
                 }
             }).then((response) => {
-                console.log(response);
                 if (response.data.code == 1) {
                     kg.play();
                     users.info = response.data.data.records;
@@ -66,7 +65,7 @@ export default {
                 } else {
                     ngm.play();
                     ElNotification({
-                        title: '登录失败',
+                        title: '失败',
                         message: response.data.msg,
                         type: 'error',
                     })

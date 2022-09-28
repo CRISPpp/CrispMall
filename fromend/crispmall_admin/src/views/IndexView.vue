@@ -7,9 +7,15 @@
     </div>
     <div class="sidebar">
         <el-menu default-active="1" class="sidebar_menu">
-            <el-menu-item index="1">用户管理</el-menu-item>
-            <el-menu-item index="2">商品管理</el-menu-item>
-            <el-menu-item index="3">订单信息</el-menu-item>
+            <router-link to="user">
+                <el-menu-item index="1">用户管理</el-menu-item>
+            </router-link>
+            <router-link to="product">
+                <el-menu-item index="2">商品管理</el-menu-item>
+            </router-link>
+            <router-link to="order">
+                <el-menu-item index="3">订单信息</el-menu-item>
+            </router-link>
         </el-menu>
         <router-view />
         <div class="xkz"></div>
@@ -33,6 +39,10 @@ export default {
 </script>
     
 <style scoped>
+a {
+    text-decoration: none;
+}
+
 .top {
     height: 10vh;
     background-image: url(@/assets/img/tsk.jpg);
