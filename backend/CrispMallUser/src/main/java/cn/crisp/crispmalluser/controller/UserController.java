@@ -33,6 +33,14 @@ public class UserController {
 
     }
 
+    @ApiOperation("根据id获取用户")
+    @GetMapping("/{id}")
+    public R<User> getUserById(@PathVariable Long id){
+        User ret = userService.getById(id);
+        if(ret == null) return R.error("没有这个用户");
+        return R.success(ret);
+    }
+
     @ApiOperation("登录")
     @PostMapping("/login")
     public R<User> login(@RequestBody LoginDto loginDto){

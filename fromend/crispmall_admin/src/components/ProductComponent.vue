@@ -1,6 +1,6 @@
 <template>
-    <div class=" product">
-        <div class=" product_info">
+    <div class="product">
+        <div class="product_info">
             <el-table :data=" products.info" style="width:100%" size="small">
 
                 <el-table-column prop="productName" label="产品名称" width="180" />
