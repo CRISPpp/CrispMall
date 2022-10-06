@@ -66,7 +66,7 @@ export default {
                         type: 'error',
                     })
                 }
-            })
+            }).catch(error => console.log(error));
 
         }
         let register = () => {
@@ -92,7 +92,7 @@ export default {
                         type: 'error',
                     })
                 }
-            })
+            }).catch(error => console.log(error));
         }
         return {
             username,

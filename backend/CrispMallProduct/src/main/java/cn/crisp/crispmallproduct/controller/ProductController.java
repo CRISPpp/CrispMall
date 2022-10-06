@@ -8,10 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,5 +33,25 @@ public class ProductController {
         Product ret = productService.getById(id);
         if(ret == null) return R.error("该订单不存在");
         return R.success(ret);
+    }
+
+    @ApiOperation("修改订单")
+    @PutMapping
+    public R<String> updateUser(@RequestBody Product product){
+        if(product == null || product.getId() == null) return R.error("不能为空，你干嘛哎哟");
+        if(productService.updateById(product)){
+            return R.success("修改成功");
+        }else{
+            return R.error("修改失败，你干嘛哎哟");
+        }
+    }
+
+    @ApiOperation("新增产品")
+    @PostMapping
+    public R<String> addProduct(@RequestBody Product product){
+        if(product == null) return R.error("不能为空，你干嘛哎哟");
+        if(product.getId() != null) return R.error("哪来的id你干嘛哎哟");
+        if(productService.save(product)) return R.success("添加成功");
+        return R.error("添加失败");
     }
 }

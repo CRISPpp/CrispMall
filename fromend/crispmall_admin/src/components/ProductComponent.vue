@@ -1,6 +1,7 @@
 <template>
     <div class="product">
         <div class="product_info">
+            <el-button @click="handleNew">新增产品</el-button>
             <el-table :data=" products.info" style="width:100%" size="small">
 
                 <el-table-column prop="productName" label="产品名称" width="180" />
@@ -17,11 +18,41 @@
 
                 <el-table-column label="操作" min-width="10%">
                     <template v-slot="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="small" @click="handleEdit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
 
             </el-table>
+
+            <el-dialog v-model="dialogFormVisible" title="Shipping address">
+                <el-form v-model="formData.product">
+                    <el-form-item label="产品名">
+                        <el-input v-model="formData.product.productName" placeholder="请输入产品名" />
+                    </el-form-item>
+                    <el-form-item label="价格">
+                        <el-input v-model="formData.product.price" placeholder="请输入价格" type="number" />
+                    </el-form-item>
+                    <el-form-item label="简介">
+                        <el-input v-model="formData.product.profile" placeholder="请输入简介" />
+                    </el-form-item>
+                    <el-form-item label="销量">
+                        <el-input v-model="formData.product.sale" placeholder="请输入销量" type="number" />
+                    </el-form-item>
+                    <el-form-item label="剩余数量">
+                        <el-input v-model="formData.product.num" placeholder="请输入剩余数量" type="number" />
+                    </el-form-item>
+                    <el-form-item label="图标">
+                        <el-input v-model="formData.product.icon" placeholder="请输入url" />
+                    </el-form-item>
+                </el-form>
+
+                <template #footer>
+                    <span class="dialog-footer">
+                        <el-button @click="handleDialogCancel">取消</el-button>
+                        <el-button type="primary" @click="handleDialogConfirm">确认</el-button>
+                    </span>
+                </template>
+            </el-dialog>
 
             <div class="pagination">
                 <el-pagination layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="page"
@@ -47,9 +78,15 @@ export default {
         });
         let kg = new Audio("http://119.29.100.51:11000/crispmall/kg.mp3");
         let ngm = new Audio("http://119.29.100.51:11000/crispmall/ngm.mp3");
-        let handleEdit = (index, row) => {
-            console.log(index);
-            console.log(row)
+        let handleEdit = (row) => {
+            dialogFormVisible.value = true;
+            formData.product.id = row.id;
+            formData.product.productName = row.productName;
+            formData.product.price = row.price;
+            formData.product.profile = row.profile;
+            formData.product.sale = row.sale;
+            formData.product.num = row.num;
+            formData.product.icon = row.icon;
         }
         let handlePage = (curPage) => {
             page.value = curPage;
@@ -78,6 +115,79 @@ export default {
         onMounted(() => {
             handlePage(page.value);
         })
+
+        let formData = reactive({
+            product: {
+
+            },
+        });
+
+        let dialogFormVisible = ref(false);
+
+        let handleDialogCancel = () => {
+            dialogFormVisible.value = false;
+        }
+
+        let handleDialogConfirm = () => {
+            dialogFormVisible.value = false;
+            if (formData.product.id != null) {
+                axios.put("/api/product", {
+                    ...formData.product,
+                }).then((response) => {
+                    if (response.data.code === 1) {
+                        ElNotification({
+                            title: '修改成功',
+                            message: response.data.data,
+                            type: 'success',
+                        })
+                        handlePage(page.value);
+                    }
+                    else {
+                        ngm.play();
+                        ElNotification({
+                            title: '修改失败',
+                            message: response.data.msg,
+                            type: 'error',
+                        })
+                    }
+                }).catch(error => console.log(error));
+            }
+            else {
+                axios.post("/api/product", {
+                    ...formData.product,
+                }).then((response) => {
+                    if (response.data.code === 1) {
+                        ElNotification({
+                            title: '修改成功',
+                            message: response.data.data,
+                            type: 'success',
+                        })
+                        handlePage(page.value);
+                    }
+                    else {
+                        ngm.play();
+                        ElNotification({
+                            title: '修改失败',
+                            message: response.data.msg,
+                            type: 'error',
+                        })
+                    }
+                }).catch(error => console.log(error));
+            }
+        }
+
+
+        let handleNew = () => {
+            dialogFormVisible.value = true;
+            formData.product.id = null;
+            formData.product.productName = "";
+            formData.product.price = 0;
+            formData.product.profile = "";
+            formData.product.sale = 0;
+            formData.product.num = 0;
+            formData.product.icon = null;
+        }
+
         return {
             products,
             handleEdit,
@@ -85,6 +195,11 @@ export default {
             page,
             total,
             handlePage,
+            formData,
+            handleDialogCancel,
+            handleDialogConfirm,
+            dialogFormVisible,
+            handleNew,
         }
     },
 }

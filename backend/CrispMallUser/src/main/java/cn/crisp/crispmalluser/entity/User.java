@@ -25,5 +25,5 @@ public class User extends BaseEntity{
     private String mail;
     private String position;
     private String icon;
-
+    private String role;
 }

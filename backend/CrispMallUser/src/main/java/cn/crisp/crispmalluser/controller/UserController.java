@@ -7,14 +7,22 @@ import cn.crisp.crispmalluser.entity.User;
 import cn.crisp.crispmalluser.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 
+@Slf4j
 @Api("用户")
 @RestController
 @RequestMapping("/user")
@@ -22,6 +30,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    MinioClient minioClient;
+
+
+    @Value("${minio.bucketName}")
+    String bucketName;
     @ApiOperation("获取所有用户")
     @GetMapping
     public R<Page> getUser(int page, int pageSize){
@@ -66,5 +80,43 @@ public class UserController {
         user1.setPassword(loginDto.getPassword());
         userService.save(user1);
         return R.success("注册成功");
+    }
+
+    @ApiOperation("修改用户")
+    @PutMapping
+    public R<String> updateUser(@RequestBody User user){
+        if(user == null || user.getId() == null) return R.error("不能为空，你干嘛哎哟");
+        if(userService.updateById(user)){
+            return R.success("修改成功");
+        }else{
+            return R.error("修改失败，你干嘛哎哟");
+        }
+    }
+
+    /**
+     * 文件上传
+     */
+    @SneakyThrows
+    @ApiOperation("上传图片")
+    @PostMapping("/upload")
+    public R<String> uploadFile(@RequestBody MultipartFile file){
+        if(file == null){
+            return R.error("上传文件不能为空");
+        }
+
+        String originalFileName = file.getOriginalFilename();
+
+        InputStream inputStream = file.getInputStream();
+
+        String fileName = bucketName + System.currentTimeMillis() + originalFileName;
+        //上传
+        try {
+            minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(inputStream,file.getSize(),-1).contentType(file.getContentType()).build());
+            inputStream.close();
+        }catch (Exception e){
+            log.info(e.getMessage());
+            return R.error("上传失败");
+        }
+        return R.success(fileName);
     }
 }
