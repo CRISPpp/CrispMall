@@ -41,8 +41,12 @@
                     <el-form-item label="剩余数量">
                         <el-input v-model="formData.product.num" placeholder="请输入剩余数量" type="number" />
                     </el-form-item>
-                    <el-form-item label="图标">
-                        <el-input v-model="formData.product.icon" placeholder="请输入url" />
+                    <el-form-item label="图标" prop="icon">
+                        <el-upload class="avatar-uploader" action="/api/user/upload" :show-file-list="false"
+                            :on-success="handleUpImage" :before-upload="beforeImageUpload">
+                            <img v-if="formData.product.icon" :src="formData.product.icon" class="avatar" />
+                            <div v-else class="waitUpload">点击上传图标</div>
+                        </el-upload>
                     </el-form-item>
                 </el-form>
 
@@ -188,6 +192,21 @@ export default {
             formData.product.icon = null;
         }
 
+        let beforeImageUpload = (rawFile) => {
+            if (rawFile.size / 1024 / 1024 > 10) {
+                ElNotification({
+                    title: '上传失败',
+                    message: '文件大小超过10MB',
+                    type: 'error',
+                })
+                return false;
+            }
+            return true;
+        }
+        let handleUpImage = (res) => {
+            formData.product.icon = res.data;
+        }
+
         return {
             products,
             handleEdit,
@@ -200,6 +219,8 @@ export default {
             handleDialogConfirm,
             dialogFormVisible,
             handleNew,
+            beforeImageUpload,
+            handleUpImage
         }
     },
 }

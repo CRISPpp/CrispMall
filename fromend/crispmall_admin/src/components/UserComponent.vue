@@ -36,13 +36,16 @@
                     <el-form-item label="位置">
                         <el-input v-model="formData.user.position" placeholder="请输入位置" />
                     </el-form-item>
-                    <el-form-item label="头像">
-                        <el-input v-model="formData.user.icon" placeholder="请输入头像url" />
-                    </el-form-item>
                     <el-form-item label="权限">
                         <el-input v-model="formData.user.role" placeholder="请输入权限, admin 或者 normal" />
                     </el-form-item>
-
+                    <el-form-item label="头像" prop="icon">
+                        <el-upload class="avatar-uploader" action="/api/user/upload" :show-file-list="false"
+                            :on-success="handleUpImage" :before-upload="beforeImageUpload">
+                            <img v-if="formData.user.icon" :src="formData.user.icon" class="avatar" />
+                            <div v-else class="waitUpload">点击上传头像</div>
+                        </el-upload>
+                    </el-form-item>
                 </el-form>
 
                 <template #footer>
@@ -87,8 +90,6 @@ export default {
             formData.user.position = row.position;
             formData.user.icon = row.icon;
             formData.user.role = row.role;
-            imageUrl = row.icon;
-            console.log(imageUrl);
             dialogFormVisible.value = true;
         }
 
@@ -155,7 +156,7 @@ export default {
             handlePage(page.value);
         })
 
-        let imageUrl = ref('');
+
         let beforeImageUpload = (rawFile) => {
             if (rawFile.size / 1024 / 1024 > 10) {
                 ElNotification({
@@ -168,8 +169,7 @@ export default {
             return true;
         }
         let handleUpImage = (res) => {
-            console.log(res);
-            imageUrl = res.data.url;
+            formData.user.icon = res.data;
         }
 
 
@@ -184,7 +184,6 @@ export default {
             formData,
             handleDialogCancel,
             handleDialogConfirm,
-            imageUrl,
             beforeImageUpload,
             handleUpImage,
         }
@@ -201,5 +200,9 @@ export default {
     padding: 10px, 0;
     margin: 0 auto;
     max-width: 100vw;
+}
+
+.waitUpload {
+    background-color: aqua;
 }
 </style>

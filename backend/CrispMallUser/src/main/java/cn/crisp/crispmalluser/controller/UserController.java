@@ -33,6 +33,8 @@ public class UserController {
     @Autowired
     MinioClient minioClient;
 
+    @Value("${minio.endpoint}")
+    String endpoint;
 
     @Value("${minio.bucketName}")
     String bucketName;
@@ -117,6 +119,6 @@ public class UserController {
             log.info(e.getMessage());
             return R.error("上传失败");
         }
-        return R.success(fileName);
+        return R.success(endpoint + "/" + bucketName + "/" + fileName);
     }
 }
