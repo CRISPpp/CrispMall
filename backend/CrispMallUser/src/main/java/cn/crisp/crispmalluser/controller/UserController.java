@@ -30,14 +30,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    MinioClient minioClient;
 
-    @Value("${minio.endpoint}")
-    String endpoint;
-
-    @Value("${minio.bucketName}")
-    String bucketName;
     @ApiOperation("获取所有用户")
     @GetMapping
     public R<Page> getUser(int page, int pageSize){
@@ -95,30 +88,5 @@ public class UserController {
         }
     }
 
-    /**
-     * 文件上传
-     */
-    @SneakyThrows
-    @ApiOperation("上传图片")
-    @PostMapping("/upload")
-    public R<String> uploadFile(@RequestBody MultipartFile file){
-        if(file == null){
-            return R.error("上传文件不能为空");
-        }
 
-        String originalFileName = file.getOriginalFilename();
-
-        InputStream inputStream = file.getInputStream();
-
-        String fileName = bucketName + System.currentTimeMillis() + originalFileName;
-        //上传
-        try {
-            minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(inputStream,file.getSize(),-1).contentType(file.getContentType()).build());
-            inputStream.close();
-        }catch (Exception e){
-            log.info(e.getMessage());
-            return R.error("上传失败");
-        }
-        return R.success(endpoint + "/" + bucketName + "/" + fileName);
-    }
 }

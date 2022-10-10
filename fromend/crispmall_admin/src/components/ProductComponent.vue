@@ -42,7 +42,7 @@
                         <el-input v-model="formData.product.num" placeholder="请输入剩余数量" type="number" />
                     </el-form-item>
                     <el-form-item label="图标" prop="icon">
-                        <el-upload class="avatar-uploader" action="/api/user/upload" :show-file-list="false"
+                        <el-upload class="avatar-uploader" action="/api/oss/upload" :show-file-list="false"
                             :on-success="handleUpImage" :before-upload="beforeImageUpload">
                             <img v-if="formData.product.icon" :src="formData.product.icon" class="avatar" />
                             <div v-else class="waitUpload">点击上传图标</div>

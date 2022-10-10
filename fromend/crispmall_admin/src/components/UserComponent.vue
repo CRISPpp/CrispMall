@@ -40,7 +40,7 @@
                         <el-input v-model="formData.user.role" placeholder="请输入权限, admin 或者 normal" />
                     </el-form-item>
                     <el-form-item label="头像" prop="icon">
-                        <el-upload class="avatar-uploader" action="/api/user/upload" :show-file-list="false"
+                        <el-upload class="avatar-uploader" action="/api/oss/upload" :show-file-list="false"
                             :on-success="handleUpImage" :before-upload="beforeImageUpload">
                             <img v-if="formData.user.icon" :src="formData.user.icon" class="avatar" />
                             <div v-else class="waitUpload">点击上传头像</div>

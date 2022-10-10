@@ -16,3 +16,8 @@ spring:
           uri: lb://CrispMallProduct
           predicates:
             - Path=/product/**
+
+        - id: oss_route
+          uri: lb://CrispMallOss
+          predicates:
+            - Path=/oss/**

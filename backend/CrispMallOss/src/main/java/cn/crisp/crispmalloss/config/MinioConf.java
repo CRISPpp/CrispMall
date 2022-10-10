@@ -1,4 +1,4 @@
-package cn.crisp.crispmalluser.config;
+package cn.crisp.crispmalloss.config;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
