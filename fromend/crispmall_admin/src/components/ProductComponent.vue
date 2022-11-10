@@ -70,10 +70,12 @@
 <script>
 import { onMounted, reactive, ref, } from 'vue';
 import axios from 'axios';
-import { ElNotification } from 'element-plus'
+import { ElNotification } from 'element-plus';
+import userStore from 'vuex';
 export default {
     name: 'ProductComponent',
     setup() {
+        let store = userStore();
         let pageSize = ref(6);
         let page = ref(1);
         let total = ref(100);
@@ -137,6 +139,8 @@ export default {
             if (formData.product.id != null) {
                 axios.put("/api/product", {
                     ...formData.product,
+                    "updateBy": store.state.user.info.id
+
                 }).then((response) => {
                     if (response.data.code === 1) {
                         ElNotification({
@@ -159,6 +163,8 @@ export default {
             else {
                 axios.post("/api/product", {
                     ...formData.product,
+                    "createBy": store.state.user.info.id
+
                 }).then((response) => {
                     if (response.data.code === 1) {
                         ElNotification({
