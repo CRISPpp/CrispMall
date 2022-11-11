@@ -29,11 +29,11 @@ import { ref } from 'vue';
 import { ElNotification } from 'element-plus'
 import axios from 'axios'
 import router from '@/router';
-import userStore from 'vuex';
+import { useStore } from 'vuex';
 export default {
     name: "LoginView",
     setup() {
-        let store = userStore();
+        const store = useStore();
         let username = ref('');
         let password = ref('');
         let loginFlag = ref(true);
@@ -56,21 +56,21 @@ export default {
                     if (response.data.data.role !== 'admin') {
                         ngm.play();
                         ElNotification({
-                        title: '登录失败',
-                        message: '用户非管理员',
-                        type: 'error',
-                    })
+                            title: '登录失败',
+                            message: '用户非管理员',
+                            type: 'error',
+                        })
                     }
                     else {
-                    store.commit('/user/updateUsername', response.data.data.username);
-                    store.commit('/user/updateId', response.data.data.id);
-                    router.push({ path: '/index' });
-                    ElNotification({
-                        title: '登录成功',
-                        message: response.data.data,
-                        type: 'success',
-                    })
-                }
+                        store.commit('user/updateUsername', response.data.data.username);
+                        store.commit('user/updateId', response.data.data.id);
+                        router.push({ path: '/index' });
+                        ElNotification({
+                            title: '登录成功',
+                            message: '登录成功',
+                            type: 'success',
+                        })
+                    }
                 }
                 else {
                     ngm.play();

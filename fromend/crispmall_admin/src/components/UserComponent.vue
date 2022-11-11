@@ -69,11 +69,9 @@
 import { onMounted, reactive, ref, } from 'vue';
 import axios from 'axios';
 import { ElNotification } from 'element-plus';
-import userStore from 'vuex';
 export default {
     name: 'UserComponent',
     setup() {
-        const store = userStore();
         let dialogFormVisible = ref(false);
         let pageSize = ref(6);
         let page = ref(1);
@@ -134,7 +132,6 @@ export default {
             dialogFormVisible.value = false;
             axios.put("/api/user", {
                 ...formData.user,
-                "updateBy":store.state.user.info.id
             }).then((response) => {
                 if (response.data.code === 1) {
                     ElNotification({

@@ -35,10 +35,11 @@ public class ProductController {
         return R.success(ret);
     }
 
-    @ApiOperation("修改订单")
+    @ApiOperation("修改产品")
     @PutMapping
-    public R<String> updateUser(@RequestBody Product product){
+    public R<String> updateProduct(@RequestBody Product product){
         if(product == null || product.getId() == null) return R.error("不能为空，你干嘛哎哟");
+        if(product.getNum() < 0) return R.error("修改数量超过库存");
         if(productService.updateById(product)){
             return R.success("修改成功");
         }else{

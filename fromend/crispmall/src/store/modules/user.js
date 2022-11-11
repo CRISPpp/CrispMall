@@ -4,7 +4,7 @@ export default {
     state: {
         info: {
             username: 'username',
-            userId: -1,
+            id: -1,
         }
     },
     mutations: {
@@ -12,13 +12,15 @@ export default {
             state.info.username = val
         },
         updateId(state, val) {
-            state.info.userId = val
+            state.info.id = val
         },
     },
     actions: {
 
     },
     getters: {
-
+        format(state) {
+            return state.info.username + ',nice to meet you~'
+          }
     }
 }

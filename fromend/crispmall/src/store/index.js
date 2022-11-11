@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import user from './module/user'
+import user from './modules/user.js'
 import createPersistedstate from 'vuex-persistedstate'
 
 

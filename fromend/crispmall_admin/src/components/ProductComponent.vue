@@ -2,7 +2,7 @@
     <div class="product">
         <div class="product_info">
             <el-button @click="handleNew">新增产品</el-button>
-            <el-table :data=" products.info" style="width:100%" size="small">
+            <el-table :data="products.info" style="width:100%" size="small">
 
                 <el-table-column prop="productName" label="产品名称" width="180" />
                 <el-table-column prop="price" label="价格" width="180" />
@@ -71,11 +71,9 @@
 import { onMounted, reactive, ref, } from 'vue';
 import axios from 'axios';
 import { ElNotification } from 'element-plus';
-import userStore from 'vuex';
 export default {
     name: 'ProductComponent',
     setup() {
-        let store = userStore();
         let pageSize = ref(6);
         let page = ref(1);
         let total = ref(100);
@@ -139,7 +137,6 @@ export default {
             if (formData.product.id != null) {
                 axios.put("/api/product", {
                     ...formData.product,
-                    "updateBy": store.state.user.info.id
 
                 }).then((response) => {
                     if (response.data.code === 1) {
@@ -163,7 +160,6 @@ export default {
             else {
                 axios.post("/api/product", {
                     ...formData.product,
-                    "createBy": store.state.user.info.id
 
                 }).then((response) => {
                     if (response.data.code === 1) {
