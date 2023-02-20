@@ -5,6 +5,7 @@ import cn.crisp.common.R;
 import cn.crisp.crispmalluser.dto.LoginDto;
 import cn.crisp.crispmalluser.entity.User;
 import cn.crisp.crispmalluser.service.UserService;
+import cn.crisp.crispmalluser.utils.SimpleRedisCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.minio.MinioClient;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Api("用户")
@@ -30,14 +32,19 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    SimpleRedisCache redisCache;
 
     @ApiOperation("获取所有用户")
     @GetMapping
     public R<Page> getUser(int page, int pageSize){
+        Page<User> cachePage = redisCache.getCacheObject("user" + page+ "size" + pageSize);
+        if (cachePage != null) return R.success(cachePage);
 
         Page<User> ret = new Page<>(page, pageSize);
         ret = userService.page(ret);
 
+        redisCache.setCacheObject("user" + page + "size" + pageSize, ret, 10, TimeUnit.SECONDS);
         return R.success(ret);
 
     }

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @RefreshScope
 @EnableFeignClients("cn.crisp.crispmallorder.feign")
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication()
 public class CrispMallOrderApplication {
 
     public static void main(String[] args) {

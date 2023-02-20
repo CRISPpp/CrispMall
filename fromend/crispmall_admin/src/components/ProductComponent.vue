@@ -2,6 +2,8 @@
     <div class="product">
         <div class="product_info">
             <el-button @click="handleNew">新增产品</el-button>
+            <el-input v-model="inputName" class="inputName" placeholder="输入商品名" />
+            <el-button @click="handleSearch">搜索</el-button>
             <el-table :data="products.info" style="width:100%" size="small">
 
                 <el-table-column prop="productName" label="产品名称" width="180" />
@@ -80,6 +82,7 @@ export default {
         let products = reactive({
             info: [],
         });
+        let inputName = ref("");
         let kg = new Audio("http://119.29.100.51:11000/crispmall/kg.mp3");
         let ngm = new Audio("http://119.29.100.51:11000/crispmall/ngm.mp3");
         let handleEdit = (row) => {
@@ -116,6 +119,7 @@ export default {
                 console.log(error);
             })
         }
+
         onMounted(() => {
             handlePage(page.value);
         })
@@ -209,6 +213,10 @@ export default {
             formData.product.icon = res.data;
         }
 
+        let handleSearch = () => {
+
+        }
+
         return {
             products,
             handleEdit,
@@ -222,7 +230,9 @@ export default {
             dialogFormVisible,
             handleNew,
             beforeImageUpload,
-            handleUpImage
+            handleUpImage,
+            inputName,
+            handleSearch,
         }
     },
 }
@@ -237,5 +247,10 @@ export default {
     padding: 10px, 0;
     margin: 0 auto;
     max-width: 100vw;
+}
+
+.inputName {
+    margin-left: 10vw;
+    width: 10vw;
 }
 </style>

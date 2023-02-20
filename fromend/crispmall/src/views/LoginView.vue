@@ -2,7 +2,7 @@
     <div class="background">
         <div class="background_login">
             <div class="background_login_bac">
-                <div class="login_tittle">CrispMallAdmin</div>
+                <div class="login_tittle">CrispMall</div>
                 <div class="login_username">
                     <el-input v-model="username" placeholder="输入账号" clearable />
                 </div>
